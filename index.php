@@ -1,61 +1,87 @@
-<!DOCTYPE html>
-<html lang="en" class="bg-gray-100">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Index</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fadeInUp {
-      animation: fadeInUp 0.8s ease forwards;
-    }
-  </style>
-</head>
-<body class="min-h-screen flex flex-col items-center p-6 font-sans text-gray-900">
+<?php
+define('PREVENT_DIRECT_ACCESS', TRUE);
+/**
+ * ------------------------------------------------------------------
+ * LavaLust - an opensource lightweight PHP MVC Framework
+ * ------------------------------------------------------------------
+ *
+ * MIT License
+ * 
+ * Copyright (c) 2020 Ronald M. Marasigan
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @package LavaLust
+ * @author Ronald M. Marasigan <ronald.marasigan@yahoo.com>
+ * @copyright Copyright 2020 (https://ronmarasigan.github.io)
+ * @since Version 1
+ * @link https://lavalust.pinoywap.org
+ * @license https://opensource.org/licenses/MIT MIT License
+ */
 
-    <h1 class="text-4xl font-bold mb-8 text-indigo-600 animate-fadeInUp">Welcome to Index View</h1>
-    <div class="flex justify-end mb-4 animate-fadeInUp">
-        <a href="<?= site_url('/users/create'); ?>"
-        class="bg-indigo-600 text-white px-5 py-2 rounded-md font-semibold shadow-md hover:bg-indigo-700 transition transform hover:scale-105">
-        + Create Record
-    </a>
-</div>
+/*
+ *---------------------------------------------------------------
+ * SYSTEM DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * This variable must contain the name of your "scheme" directory.
+ * Set the path if it is not in the same directory as this file.
+ * 
+ * NO TRAILING SLASH!
+ */
+	$system_path 			= 'scheme';
 
-    <div class="overflow-x-auto w-full max-w-4xl bg-white rounded-lg shadow-lg animate-fadeInUp">
-        <table class="min-w-full border-collapse">
-            <thead>
-                <tr class="bg-indigo-100 text-indigo-700 text-left">
-                    <th class="py-3 px-6 border-b border-indigo-300">ID</th>
-                    <th class="py-3 px-6 border-b border-indigo-300">First Name</th>
-                    <th class="py-3 px-6 border-b border-indigo-300">Last Name</th>
-                    <th class="py-3 px-6 border-b border-indigo-300">Email</th>
-                    <th class="py-3 px-6 border-b border-indigo-300">Action</th>
-                </tr>
-            </thead>
-        <tbody>
-            <?php $i = 1; foreach($users as $user): ?>
-            <tr class="hover:bg-indigo-50 transition-colors odd:bg-white even:bg-indigo-50">
-                <!-- Sequential ID -->
-                <td class="py-3 px-6 border-b border-indigo-200"><?= $i++; ?></td>
-            
-                <td class="py-3 px-6 border-b border-indigo-200"><?= $user['first_name']; ?></td>
-                <td class="py-3 px-6 border-b border-indigo-200"><?= $user['last_name']; ?></td>
-                <td class="py-3 px-6 border-b border-indigo-200"><?= $user['email']; ?></td>
-                <td class="py-3 px-6 border-b border-indigo-200">
-                    <a href="<?= site_url('users/update/'.$user['id']);?>" 
-                        class="text-blue-600 hover:underline font-medium">Update</a>
-                    <a href="<?= site_url('users/delete/'.$user['id']);?>" 
-                        class="text-red-600 hover:underline font-medium">Delete</a>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-        </table>
-    </div>
+/*
+ *---------------------------------------------------------------
+ * APPLICATION DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * If you want this front controller to use a different "app"
+ * directory than the default one you can set its name here.
+ *
+ * NO TRAILING SLASH!
+ */
+	$application_folder 	= 'app';
 
-</body>
-</html>
+/*
+ *---------------------------------------------------------------
+ * APPLICATION DIRECTORY NAME
+ *---------------------------------------------------------------
+ * This let you set up your public folder where css, js and other public,
+ * files will be visible
+ */
+	$public_folder			= 'public';
+
+/*
+ * ------------------------------------------------------
+ * Define Application Constants
+ * ------------------------------------------------------
+ */
+define('ROOT_DIR',  __DIR__ . DIRECTORY_SEPARATOR);
+define('SYSTEM_DIR', ROOT_DIR . $system_path . DIRECTORY_SEPARATOR);
+define('APP_DIR', ROOT_DIR . $application_folder . DIRECTORY_SEPARATOR);
+define('PUBLIC_DIR', $public_folder);
+
+/*
+ * ------------------------------------------------------
+ * Setup done? Then Hurray!
+ * ------------------------------------------------------
+ */
+require_once SYSTEM_DIR . 'kernel/LavaLust.php';
+?>
