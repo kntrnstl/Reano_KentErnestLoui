@@ -59,7 +59,7 @@
   </h1>
 
   <div class="w-full max-w-5xl flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 gap-4 animate-fadeInUp">
-    <form method="get" action="<?= site_url() ?>" class="flex w-full sm:w-auto">
+    <form method="get" action="<?= site_url('users'); ?>" class="flex w-full sm:w-auto">
       <input type="text" name="q" value="<?= html_escape($_GET['q'] ?? '') ?>"
              placeholder="Search student..."
              class="px-6 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-green-500 flex-grow sm:w-80 text-lg">
