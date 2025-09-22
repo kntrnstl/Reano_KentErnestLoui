@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="bg-gray-100">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,40 +15,39 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6 font-sans">
+<body class="min-h-screen flex items-center justify-center p-6 font-sans bg-gray-900 text-gray-100">
 
   <!-- Card -->
-  <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-lg animate-fadeInUp">
-    <h2 class="text-3xl font-extrabold text-indigo-600 mb-6 text-center">Update Record</h2>
+  <div class="max-w-md w-full bg-gray-800 p-8 rounded-lg shadow-lg animate-fadeInUp">
+    <h2 class="text-3xl font-extrabold text-indigo-400 mb-6 text-center">Update Record</h2>
 
-    <!-- ✅ Use user['id'] instead of segment() -->
     <form action="<?= site_url('users/update/' . $user['id']); ?>" method="POST" class="space-y-6">
 
       <!-- First Name -->
       <div>
-        <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+        <label for="first_name" class="block text-sm font-medium text-gray-200 mb-1">First Name</label>
         <input type="text" id="first_name" name="first_name"  
                value="<?= html_escape($user['first_name']); ?>" required
-               class="w-full rounded-md border border-gray-300 px-3 py-2 
-                      focus:border-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50" />
+               class="w-full rounded-md border border-gray-600 px-3 py-2 
+                      bg-gray-700 text-gray-100 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50" />
       </div>
 
       <!-- Last Name -->
       <div>
-        <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+        <label for="last_name" class="block text-sm font-medium text-gray-200 mb-1">Last Name</label>
         <input type="text" id="last_name" name="last_name"  
                value="<?= html_escape($user['last_name']); ?>" required
-               class="w-full rounded-md border border-gray-300 px-3 py-2 
-                      focus:border-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50" />
+               class="w-full rounded-md border border-gray-600 px-3 py-2 
+                      bg-gray-700 text-gray-100 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50" />
       </div>
 
       <!-- Email -->
       <div>
-        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+        <label for="email" class="block text-sm font-medium text-gray-200 mb-1">Email Address</label>
         <input type="email" id="email" name="email" 
                value="<?= html_escape($user['email']); ?>" required
-               class="w-full rounded-md border border-gray-300 px-3 py-2 
-                      focus:border-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50" />
+               class="w-full rounded-md border border-gray-600 px-3 py-2 
+                      bg-gray-700 text-gray-100 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50" />
       </div>
 
       <!-- Submit -->
