@@ -27,7 +27,7 @@ public function index()
             $q = trim($this->io->get('q'));
         }
 
-        $records_per_page = 2;
+        $records_per_page = 10;
 
         $users = $this->UsersModel->page($q, $records_per_page, $page);
         $data['users'] = $users['records'];
