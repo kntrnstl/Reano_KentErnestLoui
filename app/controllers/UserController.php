@@ -13,10 +13,9 @@ class UserController extends Controller {
     }
 
 
-public function index()
+    public function UsersData()
     {
-        $this->call->model('UsersModel');
-
+         
         $page = 1;
         if(isset($_GET['page']) && ! empty($_GET['page'])) {
             $page = $this->io->get('page');
@@ -32,7 +31,6 @@ public function index()
         $users = $this->UsersModel->page($q, $records_per_page, $page);
         $data['users'] = $users['records'];
         $total_rows = $users['total_rows'];
-
         $this->pagination->set_options([
             'first_link'     => '⏮ First',
             'last_link'      => 'Last ⏭',
@@ -40,12 +38,13 @@ public function index()
             'prev_link'      => '← Prev',
             'page_delimiter' => '&page='
         ]);
-        $this->pagination->set_theme('bootstrap');
+        $this->pagination->set_theme('bootstrap'); // or 'tailwind', or 'custom'
         $this->pagination->initialize($total_rows, $records_per_page, $page, 'users?q='.$q);
         $data['page'] = $this->pagination->paginate();
-
-        $this->call->view('users/index', $data);
+        $this->call->view('users/UsersData', $data);
+    
     }
+
 
     function create(){
         if($this->io->method() == 'post'){
