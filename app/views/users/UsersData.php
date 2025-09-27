@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Index</title>
+  <title>Student Information System</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes fadeInUp {
@@ -54,20 +54,32 @@
 </head>
 <body class="min-h-screen flex flex-col items-center p-6 font-sans text-gray-100 bg-gray-900 text-lg transition-colors duration-500">
 
-  <h1 class="text-5xl font-bold mb-10 text-indigo-400 animate-fadeInUp">
-    Student Information System
+  <!-- Dashboard Header -->
+  <h1 class="text-4xl font-bold mb-6 text-indigo-400 animate-fadeInUp">
+    <?= ($logged_in_user['role'] === 'admin') ? 'Admin Dashboard' : 'User Dashboard'; ?>
   </h1>
-<div class="w-full max-w-5xl flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 gap-4 animate-fadeInUp">
 
-    <?php
-    // Prefill search query
-    $q = '';
-    if (isset($_GET['q'])) {
-        $q = $_GET['q'];
-    }
-    ?>
+  <!-- User Status -->
+  <?php if (!empty($logged_in_user)): ?>
+    <div class="mb-6 px-6 py-3 rounded-lg bg-gray-800 border border-gray-700 text-indigo-300 animate-fadeInUp">
+      <strong>Welcome:</strong>
+      <span class="font-semibold text-white">
+        <?= html_escape($logged_in_user['first_name'] . ' ' . $logged_in_user['last_name']); ?>
+      </span>
+      <span class="ml-2 text-sm text-gray-400">(<?= html_escape($logged_in_user['role']); ?>)</span>
+    </div>
+  <?php else: ?>
+    <div class="mb-6 px-6 py-3 rounded-lg bg-red-900 border border-red-700 text-red-200 animate-fadeInUp">
+      Logged in user not found
+    </div>
+  <?php endif; ?>
 
-    <!-- Search Form -->
+  <!-- Top Bar -->
+  <div class="w-full max-w-5xl flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 gap-4 animate-fadeInUp">
+
+    <?php $q = isset($_GET['q']) ? $_GET['q'] : ''; ?>
+
+    <!-- Search -->
     <form method="get" action="<?= site_url('users'); ?>" class="flex w-full sm:w-auto">
         <input 
             type="text" 
@@ -82,14 +94,14 @@
         </button>
     </form>
 
-    <!-- Create Record Button -->
+    <!-- Create Record -->
     <a href="<?= site_url('/users/create'); ?>"
        class="bg-indigo-600 text-white px-8 py-3 rounded-md font-semibold shadow-md hover:bg-indigo-700 transition transform hover:scale-110 text-center text-lg">
         + Create Record
     </a>
-</div>
+  </div>
 
-
+  <!-- Table -->
   <div class="overflow-x-auto w-full max-w-5xl bg-gray-800 rounded-lg shadow-lg animate-fadeInUp">
     <table class="min-w-full text-lg border-collapse">
       <thead>
@@ -97,6 +109,10 @@
           <th class="py-4 px-8 border-b border-gray-700 text-left">ID</th>
           <th class="py-4 px-8 border-b border-gray-700 text-left">First Name</th>
           <th class="py-4 px-8 border-b border-gray-700 text-left">Last Name</th>
+          <th class="py-4 px-8 border-b border-gray-700 text-left">Role</th>
+          <?php if ($logged_in_user['role'] === 'admin'): ?>
+            <th class="py-4 px-8 border-b border-gray-700 text-left">Password</th>
+          <?php endif; ?>
           <th class="py-4 px-8 border-b border-gray-700 text-left">Email</th>
           <th class="py-4 px-8 border-b border-gray-700 text-left">Action</th>
         </tr>
@@ -110,23 +126,39 @@
         <?php foreach ($users as $user): ?>
         <tr class="hover:bg-indigo-700 transition-colors odd:bg-gray-800 even:bg-gray-700">
           <td class="py-4 px-8 border-b border-gray-600"><?= $rowNumber++; ?></td>
-          <td class="py-4 px-8 border-b border-gray-600"><?= $user['first_name']; ?></td>
-          <td class="py-4 px-8 border-b border-gray-600"><?= $user['last_name']; ?></td>
-          <td class="py-4 px-8 border-b border-gray-600"><?= $user['email']; ?></td>
-          <td class="py-4 px-8 border-b border-gray-600 space-x-4">
-            <a href="<?= site_url('users/update/'.$user['id']);?>" class="text-blue-400 hover:underline font-medium">Update</a>
-            <a href="<?= site_url('users/delete/'.$user['id']);?>" class="text-red-400 hover:underline font-medium">Delete</a>
-          </td>
+          <td class="py-4 px-8 border-b border-gray-600"><?= html_escape($user['first_name']); ?></td>
+          <td class="py-4 px-8 border-b border-gray-600"><?= html_escape($user['last_name']); ?></td>
+          <td class="py-4 px-8 border-b border-gray-600"><?= html_escape($user['role']); ?></td>
+          <?php if ($logged_in_user['role'] === 'admin'): ?>
+            <td class="py-4 px-8 border-b border-gray-600">*******</td>
+          <?php endif; ?>
+          <td class="py-4 px-8 border-b border-gray-600"><?= html_escape($user['email']); ?></td>
+         <td class="py-4 px-8 border-b border-gray-600">
+  <div class="flex items-center space-x-4">
+    <a href="<?= site_url('users/update/'.$user['id']);?>" 
+       class="text-blue-400 hover:underline font-medium">Update</a>
+    <a href="<?= site_url('users/delete/'.$user['id']);?>" 
+       class="text-red-400 hover:underline font-medium">Delete</a>
+  </div>
+</td>
+
         </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
-  <div class="mt-6 flex justify-center overflow-hidden">
+
+    <!-- Pagination -->
+    <div class="mt-6 flex justify-center overflow-hidden">
       <nav class="inline-flex items-center" aria-label="Pagination">
         <?= $page ?? '' ?>
       </nav>
     </div>
-  </div>
+  </div>       
+  <!-- Logout -->
+    <a href="<?= site_url('auth/logout'); ?>"
+       class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold shadow transition transform hover:scale-105 text-center mt-3">
+       Logout
+    </a>
 
 </body>
 </html>

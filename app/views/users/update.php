@@ -5,13 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Update Record</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
+    /* Fade-in animation (same as register) */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
     .animate-fadeInUp {
       animation: fadeInUp 0.8s ease forwards;
+    }
+
+    /* Material icon settings */
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: #6366f1; /* indigo */
+    }
+
+    /* 🚫 Hide browser’s default password reveal (extra black eye) */
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-ms-clear,
+    input[type="password"]::-webkit-clear-button,
+    input[type="password"]::-webkit-inner-spin-button,
+    input[type="password"]::-webkit-outer-spin-button,
+    input[type="password"]::-webkit-calendar-picker-indicator,
+    input[type="password"]::-webkit-textfield-decoration-container {
+      display: none !important;
     }
   </style>
 </head>
@@ -22,24 +53,24 @@
     <h2 class="text-3xl font-extrabold text-indigo-400 mb-6 text-center">Update Record</h2>
 
     <form action="<?= site_url('users/update/' . $user['id']); ?>" method="POST" class="space-y-6">
+      <!-- First & Last Name (side-by-side on sm+ screens, stacked on mobile) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <div>
+    <label for="first_name" class="block text-sm font-medium text-gray-200 mb-1">First Name</label>
+    <input type="text" id="first_name" name="first_name"
+           value="<?= html_escape($user['first_name']); ?>" required
+           class="w-full rounded-md border border-gray-600 px-3 py-2 
+                  bg-gray-700 text-gray-100 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50" />
+  </div>
 
-      <!-- First Name -->
-      <div>
-        <label for="first_name" class="block text-sm font-medium text-gray-200 mb-1">First Name</label>
-        <input type="text" id="first_name" name="first_name"  
-               value="<?= html_escape($user['first_name']); ?>" required
-               class="w-full rounded-md border border-gray-600 px-3 py-2 
-                      bg-gray-700 text-gray-100 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50" />
-      </div>
-
-      <!-- Last Name -->
-      <div>
-        <label for="last_name" class="block text-sm font-medium text-gray-200 mb-1">Last Name</label>
-        <input type="text" id="last_name" name="last_name"  
-               value="<?= html_escape($user['last_name']); ?>" required
-               class="w-full rounded-md border border-gray-600 px-3 py-2 
-                      bg-gray-700 text-gray-100 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50" />
-      </div>
+  <div>
+    <label for="last_name" class="block text-sm font-medium text-gray-200 mb-1">Last Name</label>
+    <input type="text" id="last_name" name="last_name"
+           value="<?= html_escape($user['last_name']); ?>" required
+           class="w-full rounded-md border border-gray-600 px-3 py-2 
+                  bg-gray-700 text-gray-100 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50" />
+  </div>
+</div>
 
       <!-- Email -->
       <div>
@@ -50,6 +81,29 @@
                       bg-gray-700 text-gray-100 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50" />
       </div>
 
+      <?php if (!empty($logged_in_user) && $logged_in_user['role'] === 'admin'): ?>
+        <!-- Role Dropdown -->
+        <div>
+          <label for="role" class="block text-sm font-medium text-gray-200 mb-1">Role</label>
+          <select id="role" name="role"
+                  class="w-full rounded-md border border-gray-600 px-3 py-2 
+                         bg-gray-700 text-gray-100 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50">
+            <option value="user" <?= $user['role'] === 'user' ? 'selected' : ''; ?>>User</option>
+            <option value="admin" <?= $user['role'] === 'admin' ? 'selected' : ''; ?>>Admin</option>
+          </select>
+        </div>
+
+        <!-- Password -->
+<div class="relative">
+  <label for="password" class="block text-sm font-medium text-gray-200 mb-1">Password</label>
+  <input type="password" id="password" name="password"
+         class="w-full rounded-md border border-gray-600 px-3 py-2 
+                bg-gray-700 text-gray-100 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50" />
+  <i class="fa-solid fa-eye-slash toggle-password" id="togglePassword"></i>
+</div>
+
+      <?php endif; ?>
+
       <!-- Submit -->
       <button type="submit" 
               class="w-full bg-indigo-600 text-white py-2 rounded-md font-semibold 
@@ -58,6 +112,26 @@
       </button>
     </form>
   </div>
+  
+<script>
+  const togglePassword = document.querySelector('#togglePassword');
+  if (togglePassword) {
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function () {
+      if (password.type === 'password') {
+        password.type = 'text';
+        this.classList.remove('fa-eye-slash');
+        this.classList.add('fa-eye');
+      } else {
+        password.type = 'password';
+        this.classList.remove('fa-eye');
+        this.classList.add('fa-eye-slash');
+      }
+    });
+  }
+</script>
+
 
 </body>
 </html>
