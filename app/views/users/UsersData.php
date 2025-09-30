@@ -53,15 +53,6 @@
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-6 font-sans text-gray-100 bg-gray-900 text-lg transition-colors duration-500">
-<?php if (session_status() === PHP_SESSION_NONE) session_start(); ?>
-<?php if (!empty($_SESSION['flash_message'])): ?>
-    <?php $flash = $_SESSION['flash_message']; ?>
-    <div class="alert alert-<?= $flash['type']; ?> alert-dismissible fade show" role="alert">
-        <?= $flash['text']; ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php unset($_SESSION['flash_message']); ?>
-<?php endif; ?>
 
   <!-- Dashboard Header -->
   <h1 class="text-4xl font-bold mb-6 text-indigo-400 animate-fadeInUp">

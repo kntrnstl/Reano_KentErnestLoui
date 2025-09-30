@@ -116,17 +116,32 @@
     </p>
   </div>
 
-  <!-- Toggle Password Visibility Script -->
-  <script>
-    const toggleBtn = document.getElementById('togglePassword');
-    const passwordInput = document.getElementById('password');
-    const eyeIcon = document.getElementById('eyeIconPassword');
+<script>
+  // ✅ Password toggle
+  const toggleBtn = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('password');
+  const eyeIcon = document.getElementById('eyeIconPassword');
 
-    toggleBtn.addEventListener('click', function () {
-  const isPassword = passwordInput.getAttribute('type') === 'password';
-  passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
-  eyeIcon.textContent = isPassword ? 'visibility_off' : 'visibility';
-});
+  toggleBtn.addEventListener('click', function () {
+    const isPassword = passwordInput.getAttribute('type') === 'password';
+    passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+    eyeIcon.textContent = isPassword ? 'visibility_off' : 'visibility';
+  });
+</script>
+
+<!-- ✅ SweetAlert2 for account deleted redirect -->
+<?php if (isset($_GET['deleted_self']) && $_GET['deleted_self'] == 1): ?>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    Swal.fire({
+      icon: 'success',
+      title: 'Account Deleted',
+      text: 'Your account has been deleted successfully. Please contact the system administrator if this was a mistake.',
+      confirmButtonColor: '#6366f1'
+    });
+  </script>
+<?php endif; ?>
+
 
   </script>
 </body>
