@@ -122,13 +122,37 @@ function update($id)
 }
 
     
-    function delete($id){
-        if($this->UsersModel->delete($id)){
-            redirect('users');
-        }else{
-            echo "Error in deleting user.";
-        }
+public function delete($id)
+{
+    // ✅ Get the logged-in user id from session
+    $currentUserId = $_SESSION['user']['id'] ?? null;
+
+    // ✅ Prevent deleting the currently logged-in account
+    if ($id == $currentUserId) {
+        $_SESSION['flash_message'] = "⚠️ You cannot delete your own account while logged in.";
+        redirect('users');
+        return;
     }
+
+    // ✅ Fetch the user first
+    $user = $this->UsersModel->find($id);
+
+    if (!$user) {
+        $_SESSION['flash_message'] = "❌ User not found.";
+        redirect('users');
+        return;
+    }
+
+    // ✅ Proceed with deletion
+    if ($this->UsersModel->delete($id)) {
+        $_SESSION['flash_message'] = "✅ Delete successful: {$user['first_name']} {$user['last_name']}";
+        redirect('users');
+    } else {
+        $_SESSION['flash_message'] = "❌ Error in deleting user.";
+        redirect('users');
+    }
+}
+
 
     public function register()
     {
