@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Material Symbols -->
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <style>
+  <style>
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -22,8 +22,7 @@
         'GRAD' 0,
         'opsz' 24;
     }
-
-    /* 🚫 Hide browser’s default password reveal (extra black eye) */
+    /* 🚫 Hide browser’s default password reveal */
     input[type="password"]::-ms-reveal,
     input[type="password"]::-ms-clear,
     input[type="password"]::-webkit-clear-button,
@@ -118,19 +117,8 @@
         </div>
       </div>
 
-      <!-- Role -->
-      <div>
-        <label for="role" class="block text-sm font-medium text-gray-200 mb-1">Role</label>
-        <select 
-          name="role" 
-          id="role"
-          required
-          class="w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-        >
-          <option value="user" selected>User</option>
-          <option value="admin">Admin</option>
-        </select>
-      </div>
+      <!-- ✅ Hidden Role Field -->
+      <input type="hidden" name="role" value="user">
 
       <!-- Register Button -->
       <button 
@@ -166,7 +154,7 @@
 
   toggleVisibility('togglePassword', 'password', 'eyeIconPassword');
   toggleVisibility('toggleConfirmPassword', 'confirmPassword', 'eyeIconConfirm');
-</script>
+  </script>
 
 </body>
 </html>

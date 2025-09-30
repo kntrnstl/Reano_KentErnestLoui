@@ -71,8 +71,8 @@
           <select id="role" name="role"
                   class="w-full rounded-md border border-gray-600 px-3 py-2 
                          bg-gray-700 text-gray-100 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50">
-            <option value="user" <?= $user['role'] === 'user' ? 'selected' : ''; ?>>User</option>
-            <option value="admin" <?= $user['role'] === 'admin' ? 'selected' : ''; ?>>Admin</option>
+            <option value="user" <?= $user['role'] === 'User' ? 'selected' : ''; ?>>User</option>
+            <option value="admin" <?= $user['role'] === 'Admin' ? 'selected' : ''; ?>>Admin</option>
           </select>
         </div>
 

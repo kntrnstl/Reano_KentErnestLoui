@@ -12,7 +12,7 @@
     }
     .animate-fadeInUp { animation: fadeInUp 0.8s ease forwards; }
 
-    /* Pagination layout */
+    /* Pagination styling */
     .pagination, .pager, ul.pagination, nav.pager {
       display: inline-flex !important;
       gap: 0.75rem;
@@ -80,7 +80,7 @@
     <?php $q = isset($_GET['q']) ? $_GET['q'] : ''; ?>
 
     <!-- Search -->
-    <form method="get" action="<?= site_url('users'); ?>" class="flex w-full sm:w-auto">
+    <form method="get" action="<?= site_url('users'); ?>" class="flex w-full sm:w-auto sm:ml-auto">
         <input 
             type="text" 
             name="q" 
@@ -94,71 +94,132 @@
         </button>
     </form>
 
-    <!-- Create Record -->
-    <a href="<?= site_url('/users/create'); ?>"
-       class="bg-indigo-600 text-white px-8 py-3 rounded-md font-semibold shadow-md hover:bg-indigo-700 transition transform hover:scale-110 text-center text-lg">
-        + Create Record
-    </a>
+    <!-- Create Record (only for admin) -->
+    <?php if ($logged_in_user['role'] === 'admin'): ?>
+      <a href="<?= site_url('/users/create'); ?>"
+         class="bg-indigo-600 text-white px-8 py-3 rounded-md font-semibold shadow-md hover:bg-indigo-700 transition transform hover:scale-110 text-center text-lg">
+          + Create Record
+      </a>
+    <?php endif; ?>
   </div>
+
 
   <!-- Table -->
-  <div class="overflow-x-auto w-full max-w-5xl bg-gray-800 rounded-lg shadow-lg animate-fadeInUp">
-    <table class="min-w-full text-lg border-collapse">
-      <thead>
-        <tr class="bg-indigo-900 text-indigo-400">
-          <th class="py-4 px-8 border-b border-gray-700 text-left">ID</th>
-          <th class="py-4 px-8 border-b border-gray-700 text-left">First Name</th>
-          <th class="py-4 px-8 border-b border-gray-700 text-left">Last Name</th>
-          <th class="py-4 px-8 border-b border-gray-700 text-left">Role</th>
-          <?php if ($logged_in_user['role'] === 'admin'): ?>
-            <th class="py-4 px-8 border-b border-gray-700 text-left">Password</th>
-          <?php endif; ?>
-          <th class="py-4 px-8 border-b border-gray-700 text-left">Email</th>
-          <th class="py-4 px-8 border-b border-gray-700 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php 
-          $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-          $perPage = 10; 
-          $rowNumber = ($currentPage - 1) * $perPage + 1; 
-        ?>
-        <?php foreach ($users as $user): ?>
-        <tr class="hover:bg-indigo-700 transition-colors odd:bg-gray-800 even:bg-gray-700">
-          <td class="py-4 px-8 border-b border-gray-600"><?= $rowNumber++; ?></td>
-          <td class="py-4 px-8 border-b border-gray-600"><?= html_escape($user['first_name']); ?></td>
-          <td class="py-4 px-8 border-b border-gray-600"><?= html_escape($user['last_name']); ?></td>
-          <td class="py-4 px-8 border-b border-gray-600"><?= html_escape($user['role']); ?></td>
-          <?php if ($logged_in_user['role'] === 'admin'): ?>
-            <td class="py-4 px-8 border-b border-gray-600">*******</td>
-          <?php endif; ?>
-          <td class="py-4 px-8 border-b border-gray-600"><?= html_escape($user['email']); ?></td>
-         <td class="py-4 px-8 border-b border-gray-600">
-  <div class="flex items-center space-x-4">
-    <a href="<?= site_url('users/update/'.$user['id']);?>" 
-       class="text-blue-400 hover:underline font-medium">Update</a>
-    <a href="<?= site_url('users/delete/'.$user['id']);?>" 
-       class="text-red-400 hover:underline font-medium">Delete</a>
+<div class="overflow-x-auto w-full max-w-5xl bg-gray-800 rounded-lg shadow-lg animate-fadeInUp">
+  <table class="min-w-full text-lg border-collapse">
+    <thead>
+      <tr class="bg-indigo-900 text-indigo-400">
+        <th class="py-4 px-8 border-b border-gray-700 text-left">ID</th>
+        <th class="py-4 px-8 border-b border-gray-700 text-left">First Name</th>
+        <th class="py-4 px-8 border-b border-gray-700 text-left">Last Name</th>
+        <th class="py-4 px-8 border-b border-gray-700 text-left">Email</th>
+        <th class="py-4 px-8 border-b border-gray-700 text-left">Role</th>
+         <?php if ($logged_in_user['role'] === 'admin'): ?>
+          <th class="py-4 px-8 border-b border-gray-700 text-left">Password</th>
+        <?php endif; ?>
+        <th class="py-4 px-8 border-b border-gray-700 text-left">Action</th>
+      </tr>
+    </thead>
+   <tbody>
+  <?php 
+    $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $perPage = 10; 
+    $rowNumber = ($currentPage - 1) * $perPage + 1; 
+
+    // 🔹 Filter users based on role
+    $filteredUsers = [];
+    foreach ($users as $u) {
+      if ($logged_in_user['role'] === 'user' && $u['role'] === 'admin') {
+        continue; // Skip admins for normal users
+      }
+      $filteredUsers[] = $u;
+    }
+  ?>
+
+  <?php if (!empty($filteredUsers)): ?>
+    <?php foreach ($filteredUsers as $user): ?>
+      <tr class="hover:bg-indigo-700 transition-colors odd:bg-gray-800 even:bg-gray-700">
+        <td class="py-4 px-8 border-b border-gray-600"><?= $rowNumber++; ?></td>
+        <td class="py-4 px-8 border-b border-gray-600"><?= html_escape($user['first_name']); ?></td>
+        <td class="py-4 px-8 border-b border-gray-600"><?= html_escape($user['last_name']); ?></td>
+        <td class="py-4 px-8 border-b border-gray-600"><?= html_escape($user['email']); ?></td>
+        <td class="py-4 px-8 border-b border-gray-600"><?= html_escape($user['role']); ?></td>
+        <?php if ($logged_in_user['role'] === 'admin'): ?>
+          <td class="py-4 px-8 border-b border-gray-600">*******</td>
+        <?php endif; ?>
+        <td class="py-4 px-8 border-b border-gray-600">
+          <div class="flex items-center space-x-4">
+            <?php if ($logged_in_user['role'] === 'admin'): ?>
+              <a href="<?= site_url('users/update/'.$user['id']);?>" class="text-blue-400 hover:underline font-medium">Update</a>
+              <a href="<?= site_url('users/delete/'.$user['id']);?>"
+                 onclick="confirmDelete(event, this.href, '<?= html_escape($user['first_name'].' '.$user['last_name']); ?>');"
+                 class="text-red-400 hover:underline font-medium">
+                 Delete
+              </a>
+            <?php elseif ($logged_in_user['role'] === 'user' && $logged_in_user['id'] === $user['id']): ?>
+              <a href="<?= site_url('users/update/'.$user['id']);?>" class="text-blue-400 hover:underline font-medium">Edit Profile</a>
+            <?php endif; ?>
+          </div>
+        </td>
+      </tr>
+    <?php endforeach; ?>
+  <?php else: ?>
+    <!-- 🔹 Message when no records match -->
+    <tr>
+      <td colspan="7" class="py-6 px-8 text-center text-gray-400">
+        🚫 No record matches your search.
+      </td>
+    </tr>
+  <?php endif; ?>
+</tbody>
+  </table>
+
+  <!-- Pagination -->
+  <div class="mt-6 flex justify-center overflow-hidden">
+    <nav class="inline-flex items-center" aria-label="Pagination">
+      <?= $page ?? '' ?>
+    </nav>
   </div>
-</td>
-
-        </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
-
-    <!-- Pagination -->
-    <div class="mt-6 flex justify-center overflow-hidden">
-      <nav class="inline-flex items-center" aria-label="Pagination">
-        <?= $page ?? '' ?>
-      </nav>
-    </div>
-  </div>       
+</div>
+      
   <!-- Logout -->
     <a href="<?= site_url('auth/logout'); ?>"
        class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold shadow transition transform hover:scale-105 text-center mt-3">
        Logout
     </a>
+
+  <!-- ✅ SweetAlert2 Confirmation Script -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function confirmDelete(event, url, name) {
+      event.preventDefault();
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You are about to delete the account of " + name,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e3342f',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = url + "?deleted=1";
+        }
+      });
+    }
+
+    // ✅ Show success popup if deleted
+    <?php if (isset($_GET['deleted']) && $_GET['deleted'] == 1): ?>
+      Swal.fire({
+        icon: 'success',
+        title: 'Delete successful',
+        text: 'The account has been deleted.',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    <?php endif; ?>
+  </script>
 
 </body>
 </html>
