@@ -140,7 +140,7 @@
    <tbody>
   <?php 
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-    $perPage = 10; 
+    $perPage = isset($perPage) ? $perPage : 10;
     $rowNumber = ($currentPage - 1) * $perPage + 1; 
 
     // 🔹 Filter users based on role

@@ -209,6 +209,7 @@ function update($id)
         $data['user'] = $user['records'];
         $total_rows = $user['total_rows'];
 
+        $data['perPage'] = $records_per_page;
         $this->pagination->set_options([
             'first_link'     => '⏮ First',
             'last_link'      => 'Last ⏭',
