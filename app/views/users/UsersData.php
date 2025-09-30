@@ -74,34 +74,51 @@
     </div>
   <?php endif; ?>
 
-  <!-- Top Bar -->
+    <!-- Top Bar -->
   <div class="w-full max-w-5xl flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 gap-4 animate-fadeInUp">
 
     <?php $q = isset($_GET['q']) ? $_GET['q'] : ''; ?>
 
-    <!-- Search -->
-    <form method="get" action="<?= site_url('users'); ?>" class="flex w-full sm:w-auto sm:ml-auto">
-        <input 
-            type="text" 
-            name="q" 
-            value="<?= html_escape($q); ?>" 
-            placeholder="Search student..."
-            class="px-6 py-3 border border-gray-600 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 flex-grow sm:w-80 text-lg bg-gray-800 text-gray-100"
-        >
-        <button type="submit"
-            class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-r-lg shadow transition-all duration-300 transform hover:scale-110 text-lg">
-            🔍
-        </button>
-    </form>
-
-    <!-- Create Record (only for admin) -->
     <?php if ($logged_in_user['role'] === 'admin'): ?>
+      <!-- 🔹 Admin: Search (left) -->
+      <form method="get" action="<?= site_url('users'); ?>" class="flex w-full sm:w-auto">
+          <input 
+              type="text" 
+              name="q" 
+              value="<?= html_escape($q); ?>" 
+              placeholder="Search student..."
+              class="px-6 py-3 border border-gray-600 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 flex-grow sm:w-80 text-lg bg-gray-800 text-gray-100"
+          >
+          <button type="submit"
+              class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-r-lg shadow transition-all duration-300 transform hover:scale-110 text-lg">
+              🔍
+          </button>
+      </form>
+
+      <!-- 🔹 Admin: Create Record (right) -->
       <a href="<?= site_url('/users/create'); ?>"
          class="bg-indigo-600 text-white px-8 py-3 rounded-md font-semibold shadow-md hover:bg-indigo-700 transition transform hover:scale-110 text-center text-lg">
           + Create Record
       </a>
+
+    <?php else: ?>
+      <!-- 🔹 User: Search only (aligned right) -->
+      <form method="get" action="<?= site_url('users'); ?>" class="flex w-full sm:w-auto sm:ml-auto">
+          <input 
+              type="text" 
+              name="q" 
+              value="<?= html_escape($q); ?>" 
+              placeholder="Search student..."
+              class="px-6 py-3 border border-gray-600 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 flex-grow sm:w-80 text-lg bg-gray-800 text-gray-100"
+          >
+          <button type="submit"
+              class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-r-lg shadow transition-all duration-300 transform hover:scale-110 text-lg">
+              🔍
+          </button>
+      </form>
     <?php endif; ?>
   </div>
+
 
 
   <!-- Table -->
